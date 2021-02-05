@@ -1,61 +1,57 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
-  
   def index
-      @tasks=Task.all
-  end
-
-  def show
-      
-  end
-
-  def new
-      @task=Task.new
-  end
-
-  def create
-      @task = Task.new(task_params)
-
-    if @task.save
-      flash[:success] = 'Task が正常に登録されました'
-      redirect_to @task
-    else
-      flash.now[:danger] = 'Task が登録されませんでした'
-      render :new
+    if logged_in?
+      @task=current_user.tasks.build
+      @tasks=current_user.tasks.page(params[:page])
     end
   end
 
-  def edit
-      
+  def show
   end
 
-  def update
-      
-
-    if @task.update(task_params)
-      flash[:success] = 'Task は正常に更新されました'
-      redirect_to @task
+  def create
+    @task=current_user.tasks.build(task_params)
+    if @task.save
+      flash[:success]='タスクが正常に登録されました。'
+      redirect_to root_url
     else
-      flash.now[:danger] = 'Task は更新されませんでした'
-      render :edit
+      @tasks=current_user.tasks.all
+      flash.now[:danger]='タスクが正常に登録されませんでした。'
+      render :index
     end
   end
 
   def destroy
-      
     @task.destroy
-
-    flash[:success] = 'Task は正常に削除されました'
+    flash[:success]='タスクは正常に削除されました'
     redirect_to tasks_url
+  end
+
+  def new
+    @task=Task.new
+  end
+
+  def update
+    if @task.update(task_params)
+      flash[:success]='タスクが正常に更新されました。'
+      redirect_to current_user
+    else
+      flash.now[:danger]='タスクが正常に更新されませんでした。'
+      render:index
+    end  
+  end
+
+  def edit
   end
   
   private
   
   def set_task
-    @task=Task.find(params[:id])
+    @task = Task.find(params[:id])
   end
-  
+
   def task_params
-      params.require(:task).permit(:content,:status)
+    params.require(:task).permit(:content,:status)
   end
 end

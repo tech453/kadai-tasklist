@@ -55,3 +55,4 @@ group :production do
 end
 gem 'kaminari'
 gem 'bcrypt','~>3.1.7'
+gem 'pry-byebug' ,group: :development

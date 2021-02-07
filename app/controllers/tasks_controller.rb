@@ -2,12 +2,8 @@ class TasksController < ApplicationController
   before_action :require_user_logged_in
   before_action :correct_user, only: [:destroy,:edit,:show,:update]
   def index
-    if logged_in?
-      @task=current_user.tasks.build
-      @tasks=current_user.tasks.page(params[:page])
-    else
-      redirect_to login_url
-    end
+    @task=current_user.tasks.build
+    @tasks=current_user.tasks.page(params[:page])
   end
 
   def show
@@ -21,7 +17,7 @@ class TasksController < ApplicationController
     else
       @tasks=current_user.tasks.all
       flash.now[:danger]='タスクが正常に登録されませんでした。'
-      render :index
+      render :new
     end
   end
 

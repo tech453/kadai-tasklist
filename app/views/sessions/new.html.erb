@@ -7,6 +7,7 @@
 
     <%= form_with(url: login_path, scope: :session, local: true) do |f| %>
 
+
       <div class="form-group">
         <%= f.label :email, 'Email' %>
         <%= f.email_field :email, class: 'form-control' %>

@@ -1,5 +1,7 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :require_user_logged_in
+  before_action :correct_user, only: [:destroy,:edit,:show,:update]# before_action :require_user_logged_in, only: [:show]
+  # before_action :set_task, only: [:show, :edit, :update, :destroy]
   def index
     if logged_in?
       @task=current_user.tasks.build
@@ -29,13 +31,13 @@ class TasksController < ApplicationController
   end
 
   def new
-    @task=Task.new
+    @task=current_user.tasks.build
   end
 
   def update
     if @task.update(task_params)
       flash[:success]='タスクが正常に更新されました。'
-      redirect_to current_user
+      redirect_to root_url
     else
       flash.now[:danger]='タスクが正常に更新されませんでした。'
       render:index
@@ -47,11 +49,19 @@ class TasksController < ApplicationController
   
   private
   
-  def set_task
-    @task = Task.find(params[:id])
-  end
+  # def set_task
+  #   @task = Task.find(params[:id])
+  # end
 
   def task_params
     params.require(:task).permit(:content,:status)
+  end
+  
+  def correct_user
+    @task = current_user.tasks.find_by(id: params[:id])
+    unless @task
+      flash[:danger]="そのタスクにはアクセスできません"
+      redirect_to root_url
+    end
   end
 end

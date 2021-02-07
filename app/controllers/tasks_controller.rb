@@ -41,7 +41,7 @@ class TasksController < ApplicationController
       redirect_to root_url
     else
       flash.now[:danger]='タスクが正常に更新されませんでした。'
-      render:index
+      render :edit
     end  
   end
 

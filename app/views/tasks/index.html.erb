@@ -1,18 +1,9 @@
-<% if logged_in? %>
-  <p>ログインユーザ : <%= current_user.name %></p>
-  <div class="row">
-    <aside class="col-sm-4">
-      <%= render 'tasks/form' %>
-    </aside>
-    <div class="col-sm-8">
-      <%= render 'tasks/tasks', tasks: @tasks %>
-    </div>
+<p>ログインユーザ : <%= current_user.name %></p>
+<div class="row">
+  <aside class="col-sm-4">
+    <%= render 'tasks/form' %>
+  </aside>
+  <div class="col-sm-8">
+    <%= render 'tasks/tasks', tasks: @tasks %>
   </div>
-<% else %>
-  <div class="center jumbotron">
-    <div class="text-center">
-      <h1>Welcome to the Tasklists</h1>
-      <%= link_to 'Sign up now!', signup_path, class: 'btn btn-lg btn-primary' %>
-    </div>
-  </div>
-<% end %>
+</div>
